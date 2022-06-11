@@ -1,19 +1,15 @@
-import {readFile, rename as renameFunction} from "fs";
+import {createReadStream, rename as renameFunction} from "fs";
+import {stdout as output} from "node:process";
 
 export const rename = async (pathToOriginFile, pathToResultFile) => {
-    await readFile(pathToOriginFile, (err,result) => {
-        if(err){
-            throw new Error('Operation failed')
-        }
+    const readOriginFile = createReadStream(pathToOriginFile)
+    readOriginFile.on('error', (err) => {
+        output.write(`\nOperation failed`)
     })
-    await readFile(pathToResultFile, (err,result) => {
-        if(result){
-            throw new Error('Operation failed')
-        }
-    })
+
     await renameFunction(pathToOriginFile,pathToResultFile, (err,result) => {
         if(err){
-            throw new Error('FS operation failed')
+            output.write(`\nOperation failed`)
         }
     })
 };

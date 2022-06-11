@@ -3,7 +3,7 @@ export const getOSInfo = (flag) => {
     let result = ''
     switch (flag){
         case 'EOL': {
-            console.log(os.EOL)
+            console.log(JSON.stringify(os.EOL))
             break;
         }
         case 'cpus': {

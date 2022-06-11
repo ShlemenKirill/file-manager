@@ -1,7 +1,8 @@
 import {copyFile, mkdir, readdir} from "fs";
 import {stdout as output} from "node:process";
+import {remove} from "./delete.js";
 
-export const copy = async (originFile, folderToCopy, pathToResultFile) => {
+export const move = async (originFile, folderToCopy, pathToResultFile) => {
     await readdir(folderToCopy, async (err,files) => {
         if(err){
             await mkdir(folderToCopy,async (err,res) => {
@@ -20,6 +21,7 @@ export const copy = async (originFile, folderToCopy, pathToResultFile) => {
                 if(err){
                     output.write(`\nOperation failed`)
                 }
+                remove(originFile)
             })
         }
     })

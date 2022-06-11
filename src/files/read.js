@@ -1,18 +1,17 @@
-import {createReadStream} from "fs";
+import {createReadStream} from "node:fs";
+import {stdout as output} from "node:process";
 
-
-export const readFile = async (pathToFile) => {
+export const readFile = async (pathToFile, currentDir) => {
     let data = ''
-    const readableStream = await createReadStream(
-        pathToFile, {encoding: 'utf-8'}
-    )
+    const readableStream = await createReadStream(pathToFile)
+    readableStream.on('error', (err) => {
+        output.write(`\nOperation failed\n`)
+    })
     readableStream.on('data', (chunk) => {
         data += chunk
     })
-    readableStream.on('error', (err) => {
-        throw new Error('Operation failed')
-    })
     readableStream.on('end', (chunk) => {
-        process.stdout.write(data)
+        console.log(data)
+        output.write(`\nYou are currently in ${currentDir} `)
     })
 }

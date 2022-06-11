@@ -1,14 +1,9 @@
-import {readFile, writeFile} from "fs";
+import {createWriteStream} from "fs";
+import {stdout as output} from "node:process";
 
 export const create = async (pathToFile) => {
-    await readFile(pathToFile, (err,result) => {
-        if(result){
-            throw new Error('Operation failed')
-        }
-    })
-    await writeFile(pathToFile, '', (err,result) => {
-        if(err){
-            throw new Error(err.message)
-        }
+    const writableStream = await createWriteStream(pathToFile)
+    writableStream.on('error', (err) => {
+        output.write(`\nOperation failed`)
     })
 };
